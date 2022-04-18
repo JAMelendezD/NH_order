@@ -7,7 +7,7 @@
 ## Autocorrelation
 
 <p align="center">
-  <img width="400" src="images/acf.png">
+  <img width="800" src="images/acf.png">
 </p>
 
 ## iRED
@@ -16,5 +16,5 @@
 ## Ordered parameter
 
 <p align="center">
-  <img width="400" src="images/order.png">
+  <img width="800" src="images/order.png">
 </p>
