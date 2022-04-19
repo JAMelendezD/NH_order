@@ -9,7 +9,7 @@ Calculates the generalized order parameter using the autocorrelation function of
 ## Autocorrelation
 
 <p align="center">
-  <img width="400" src="images/no_block.png">
+  <img width="300" src="images/no_block.png">
 </p>
 
 ```
@@ -22,7 +22,7 @@ python nh_order.py protein.tpr protein_nj_fit.xtc 5000 10000 "name N and not res
 </p>
 
 <p align="center">
-  <img width="400" src="images/block.png">
+  <img width="300" src="images/block.png">
 </p>
 
 
