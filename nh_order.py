@@ -1,10 +1,10 @@
 import numpy as np
-import MDAnalysis
+import MDAnalysis as mda
 import argparse
 import matplotlib.pyplot as plt
 from numba import jit
 from tqdm import tqdm
-from scipy.optimize import differential_evolution, curve_fit
+from scipy.optimize import curve_fit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
 import warnings
 
@@ -149,7 +149,8 @@ def ired(mat):
     return(S)
 
 def run():
-    u = MDAnalysis.Universe(args.top,args.traj)
+    print(f'MDA version: {mda.__version__}')
+    u = mda.Universe(args.top,args.traj)
     len_traj = len(u.trajectory[args.first:args.last])
 
     dt = (u.trajectory[1].time-u.trajectory[0].time)*1e-3
@@ -180,6 +181,11 @@ def run():
     shape = np.shape(vectors)    
     frames,residues = shape[0],shape[1]
 
+    if args.P == 1:
+        func = p1_angle
+    elif args.P == 2:
+        func = p2_angle
+
     if args.mode == 0 or args.mode == 1:
         if args.lenacf != None:
             if args.lenacf <= int(frames/2):
@@ -195,15 +201,9 @@ def run():
         fig = plt.figure(figsize=(7,6))
         for residue in tqdm(range(residues),colour='green',desc='Residues'):
             if args.mode == 0:
-                if args.P == 1:
-                    C_p = acf(vectors,residue,frames,args.lenacf,p1_angle)
-                elif args.P == 2:
-                    C_p = acf(vectors,residue,frames,args.lenacf,p2_angle)
+                C_p = acf(vectors,residue,frames,args.lenacf,func)
             elif args.mode == 1:
-                if args.P == 1:
-                    C_p = acf_blocks(vectors,residue,frames,args.lenacf,p1_angle)
-                elif args.P == 2:
-                    C_p = acf_blocks(vectors,residue,frames,args.lenacf,p2_angle)
+                C_p = acf_blocks(vectors,residue,frames,args.lenacf,func)
             result = list(zip(time,C_p))
             np.savetxt(f'{args.out}{sel1[residue].resid}.dat',result,fmt=['%15.3f','%10.5f'],header='{:>13s}{:>11s}'.format('Time (ns)','C_p(t)'))
             fittedParameters, pcov = curve_fit(exp_model, time, C_p, bounds = ([-0.5,min_x],[1,max_x]))
@@ -220,15 +220,11 @@ def run():
         result = list(zip(residue_ids,order))
         np.savetxt(f'{args.out}order_acf_{args.mode}_{args.lenacf}_{args.P}.dat',result,fmt=['%8d','%8.5f'],header='{:7s}{:>8s}'.format('Residue','S2'))
 
-    
     elif args.mode == 2:
         mat = np.zeros((residues,residues))
         residue_ids = []
         for residue in tqdm(range(residues),colour='green',desc='Residues'):
-            if args.P == 1:
-                mat[:][residue] = angles(vectors,residues,residue,frames,p1_angle)
-            elif args.P == 2:
-                mat[:][residue] = angles(vectors,residues,residue,frames,p2_angle)
+            mat[:][residue] = angles(vectors,residues,residue,frames,func)
             residue_ids.append(sel1[residue].resid)
         mat = mat+mat.T
         np.fill_diagonal(mat, mat.diagonal()/2.0)
