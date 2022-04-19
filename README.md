@@ -1,4 +1,4 @@
-# NH Generalized order parameter
+# NH Generalized Order Parameter
 
 Calculates the generalized order parameter using the autocorrelation function of the NH vectors (requires well-fitted trajectory) or using the iRED procedure applied to the NH vectors. 
 
