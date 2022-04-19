@@ -9,7 +9,7 @@ Calculates the generalized order parameter using the autocorrelation function of
 ## Autocorrelation
 
 
-$x + y$
+$$x + y$$
 
 ```
 python nh_order.py protein.tpr protein_nj_fit.xtc 5000 10000 "name N and not resname PRO and not resid 1" "name H and not resname PRO and not resid 1" 2 ./data/ --mode 0 --lenacf 100
