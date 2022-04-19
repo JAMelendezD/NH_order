@@ -9,7 +9,7 @@ Calculates the generalized order parameter using the autocorrelation function of
 ## Autocorrelation
 
 ```
-python nh_order.py protein.tpr protein.xtc 0.1 "name N and not resname PRO and not resid 1" "name H and not resname PRO and not resid 1" 10 ./results
+python nh_order.py protein.tpr protein.xtc "name N and not resname PRO and not resid 1" "name H and not resname PRO and not resid 1" ./results/
 ```
 
 <p align="center">
@@ -19,8 +19,12 @@ python nh_order.py protein.tpr protein.xtc 0.1 "name N and not resname PRO and n
 ## iRED
 
 ```
-python nh_order.py protein.tpr protein.xtc 0.1 "name N and not resname PRO and not resid 1" "name H and not resname PRO and not resid 1" 10 ./results
+python nh_order.py protein.tpr protein.xtc "name N and not resname PRO and not resid 1" "name H and not resname PRO and not resid 1" ./results/ --mode 1
 ```
+
+<p align="center">
+  <img width="800" src="images/ired_mat.png">
+</p>
 
 ## Ordered parameter
 
