@@ -36,8 +36,8 @@ python nh_order.py protein.tpr protein_nj_fit.xtc 5000 10000 "name N and not res
 ```
 
 <p align="center">
-  <img width="400" src="images/ired_mat_1.png">
-  <img width="400" src="images/ired_mat_2.png">
+  <img width="400" src="images/mat_ired_1.png">
+  <img width="400" src="images/mat_ired_2.png">
 </p>
 
 ## Order parameter
