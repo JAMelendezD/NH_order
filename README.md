@@ -26,7 +26,7 @@ python nh_order.py protein.tpr protein.xtc "name N and not resname PRO and not r
   <img width="800" src="images/ired_mat.png">
 </p>
 
-## Ordered parameter
+## Order parameter
 
 <p align="center">
   <img width="800" src="images/order.png">
