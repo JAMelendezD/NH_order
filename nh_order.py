@@ -100,6 +100,16 @@ def angles(vectors,num_residues,residue,frames,func):
                 angs[k] +=  func(vectors[i][residue],vectors[i][k])
     return(angs/frames)
 
+@jit(nopython=True)
+def angle_z(vectors,z,residue,frames,func):
+    '''
+    Computes the angle of every vector to the z-axis
+    '''
+    angs = 0
+    for i in range(frames):
+        angs +=  func(vectors[i][residue],z)
+    return(angs/frames)
+
 def exp_model(x,A0,A1):
     '''
     Exponential model for the fit of the autocorrelation
@@ -233,6 +243,14 @@ def run():
         S2 = ired(mat)
         result = list(zip(residue_ids,S2))
         np.savetxt(f'{args.out}order_ired_{args.P}.dat',result,fmt=['%8d','%8.5f'],header='{:7s}{:>8s}'.format('Residue','S2'))
+
+    elif args.mode == 3:
+        order = 0
+        z = np.array([0.0,0.0,1.0],dtype=np.float32)
+        for residue in tqdm(range(residues),colour='green',desc='Residues'):
+            order += angle_z(vectors,z,residue,frames,func)
+        print(order/residues)
+
 
 if __name__ == '__main__':
     run()
