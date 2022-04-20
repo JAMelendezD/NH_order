@@ -19,8 +19,9 @@ parser.add_argument('last', type=int, help='Last frame inclusive')
 parser.add_argument('sele1', type=str, help='main selection 1')
 parser.add_argument('sele2', type=str, help='main selection 2')
 parser.add_argument('P', type=int, help='legendre polynomial only options 1 or 2.')
-parser.add_argument('--mode', default=0,required=False, type=int, help='0 acf. 1 acf in blocks. 2 iRED')
+parser.add_argument('--mode', default=0,required=False, type=int, help='0 acf. 1 acf in blocks. 2 iRED. 3 computes angle against vector')
 parser.add_argument('--lenacf', default=None,required=False, type=int, help='Length of the ACF maximum frames/2')
+parser.add_argument('--vec', nargs='+', help='Vector to compute angle for mode 3', required=False)
 parser.add_argument('out', type=str, help='output file')
 args = parser.parse_args()
 
@@ -101,13 +102,13 @@ def angles(vectors,num_residues,residue,frames,func):
     return(angs/frames)
 
 @jit(nopython=True)
-def angle_z(vectors,z,residue,frames,func):
+def angle_vec(vectors,vec,residue,frames,func):
     '''
     Computes the angle of every vector to the z-axis
     '''
     angs = 0
     for i in range(frames):
-        angs +=  func(vectors[i][residue],z)
+        angs +=  func(vectors[i][residue],vec)
     return(angs/frames)
 
 def exp_model(x,A0,A1):
@@ -226,9 +227,9 @@ def run():
         plt.xlim(time[0],time[-1])
         plt.xlabel(r'$\tau$ (ns)')
         plt.ylabel(r'$C$($\tau$)')
-        plt.savefig(f'{args.out}acf_{args.mode}_{args.lenacf}_{args.P}.png',dpi=300,bbox_inches='tight')
+        plt.savefig(f'{args.out}acf_{args.mode}_{args.lenacf}_P{args.P}.png',dpi=300,bbox_inches='tight')
         result = list(zip(residue_ids,order))
-        np.savetxt(f'{args.out}order_acf_{args.mode}_{args.lenacf}_{args.P}.dat',result,fmt=['%8d','%8.5f'],header='{:7s}{:>8s}'.format('Residue','S2'))
+        np.savetxt(f'{args.out}order_acf_{args.mode}_{args.lenacf}_P{args.P}.dat',result,fmt=['%8d','%8.5f'],header='{:7s}{:>8s}'.format('Residue','S2'))
 
     elif args.mode == 2:
         mat = np.zeros((residues,residues))
@@ -245,12 +246,18 @@ def run():
         np.savetxt(f'{args.out}order_ired_{args.P}.dat',result,fmt=['%8d','%8.5f'],header='{:7s}{:>8s}'.format('Residue','S2'))
 
     elif args.mode == 3:
-        order = 0
-        z = np.array([0.0,0.0,1.0],dtype=np.float32)
-        for residue in tqdm(range(residues),colour='green',desc='Residues'):
-            order += angle_z(vectors,z,residue,frames,func)
-        print(order/residues)
-
+        if args.vec == None:
+            raise argparse.ArgumentError('mode 3 require also a vector with the --vec flag')
+        else:
+            if len(args.vec) != 3:
+                raise argparse.ArgumentError('vector must be 3 dimensional')
+            else:
+                with open(f'{args.out}order_axis.dat', 'a') as f:
+                    order = 0
+                    vec = np.array(args.vec,dtype=np.float32)
+                    for residue in tqdm(range(residues),colour='green',desc='Residues'):
+                        order += angle_vec(vectors,vec,residue,frames,func)
+                    f.write(f'{sel1.names[0]:>8s}{order/residues:10.5f}\n')
 
 if __name__ == '__main__':
     run()
