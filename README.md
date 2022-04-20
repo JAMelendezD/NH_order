@@ -53,3 +53,13 @@ python nh_order.py protein.tpr protein_nj_fit.xtc 5000 10000 "name N and not res
   <img width="800" src="images/NH_order_all.png">
   <img width="800" src="images/NH_order_block.png">
 </p>
+
+## Order parameter to any axis useful for membranes
+
+```
+python nh_order.py mem.tpr mem_mol.xtc 5000 10000 "name C3" "name H3" 2 ./data/ --mode 3 --vec 0 0 1
+```
+
+<p align="center">
+  <img width="400" src="images/order.png">
+</p>
