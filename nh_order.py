@@ -108,7 +108,7 @@ def angle_vec(vectors,vec,residue,frames,func):
     '''
     angs = 0
     for i in range(frames):
-        angs +=  func(vectors[i][residue],vec)
+        angs += func(vectors[i][residue],vec) 
     return(angs/frames)
 
 def exp_model(x,A0,A1):
