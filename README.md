@@ -8,9 +8,7 @@ Calculates the generalized order parameter using the autocorrelation function of
 
 ## Autocorrelation
 
-<p align="center">
-  <img width="300" src="images/no_block.png">
-</p>
+$$\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)$$
 
 ```
 python nh_order.py protein.tpr protein_nj_fit.xtc 5000 10000 "name N and not resname PRO and not resid 1" "name H and not resname PRO and not resid 1" 2 ./data/ --mode 0 --lenacf 100
