@@ -19,10 +19,7 @@ python nh_order.py protein.tpr protein_nj_fit.xtc 5000 10000 "name N and not res
   <img width="400" src="images/acf_0_1000_2.png">
 </p>
 
-<p align="center">
-  <img width="300" src="images/block.png">
-</p>
-
+$$C_f(j\Delta t) = \frac{1}{M}\sum_{i=0}^{N-1-M} f(i\Delta t)f((i+j)\Delta t)$$
 
 ```
 python nh_order.py protein.tpr protein_nj_fit.xtc 5000 10000 "name N and not resname PRO and not resid 1" "name H and not resname PRO and not resid 1" 2 ./data/ --mode 1 --lenacf 100
